@@ -1,0 +1,55 @@
+{
+  "titulo": "Escala de hábitos de estudio",
+  "idioma": "es",
+  "total_items": 2,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "Me resulta fácil empezar las tareas difíciles.",
+      "tipo": "escala_likert",
+      "alternativas": [
+        {
+          "valor": 0,
+          "texto": "Nunca"
+        },
+        {
+          "valor": 1,
+          "texto": "A veces"
+        },
+        {
+          "valor": 2,
+          "texto": "A menudo"
+        },
+        {
+          "valor": 3,
+          "texto": "Siempre"
+        }
+      ],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 2,
+      "enunciado": "Prefiero estudiar en silencio.",
+      "tipo": "escala_likert",
+      "alternativas": [
+        {
+          "valor": 0,
+          "texto": "Nunca"
+        },
+        {
+          "valor": 1,
+          "texto": "A veces"
+        },
+        {
+          "valor": 2,
+          "texto": "A menudo"
+        },
+        {
+          "valor": 3,
+          "texto": "Siempre"
+        }
+      ],
+      "respuesta_correcta": null
+    }
+  ]
+}

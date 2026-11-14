@@ -1,0 +1,97 @@
+[
+  {
+    "file": "sample_questionnaire_es.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "sample_questionnaire_it.docx",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "sample_questionnaire_en.xlsx",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_solo_likert.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_estilo_parentesis.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_estilo_q.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_sin_clave.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_clave_invalida.pdf",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "en_solo_abierta.docx",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "it_verdadero_falso.docx",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_emparejamiento.xlsx",
+    "mode": "deterministic",
+    "note": "Texto nativo. No necesita OCR ni modelo."
+  },
+  {
+    "file": "es_baja_confianza.pdf",
+    "mode": "llm",
+    "note": "Texto con salto de numeración y párrafos sueltos. Debe llamar al modelo sin OCR."
+  },
+  {
+    "file": "es_foto_clara.png",
+    "mode": "ocr",
+    "note": "Foto nítida. OCR, y el modelo queda apagado en esta pasada."
+  },
+  {
+    "file": "es_foto_clara.jpg",
+    "mode": "ocr",
+    "note": "La misma foto en JPEG."
+  },
+  {
+    "file": "es_foto_clara.webp",
+    "mode": "ocr",
+    "note": "La misma foto en WEBP."
+  },
+  {
+    "file": "es_escaneado.pdf",
+    "mode": "ocr",
+    "note": "PDF sin capa de texto. Entra por OCR."
+  },
+  {
+    "file": "es_foto_corta.png",
+    "mode": "ocr_llm",
+    "note": "Poco texto. OCR y, si el modelo está activo, también el modelo."
+  },
+  {
+    "file": "es_escaneado_corto.pdf",
+    "mode": "ocr_llm",
+    "note": "PDF escaneado corto. OCR y modelo."
+  },
+  {
+    "file": "sample_questionnaire_photo.jpg",
+    "mode": "reference",
+    "note": "La salida JSON es el texto impreso, no un OCR en vivo."
+  }
+]

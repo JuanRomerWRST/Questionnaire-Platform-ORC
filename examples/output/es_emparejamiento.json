@@ -1,0 +1,31 @@
+{
+  "titulo": "Cuestionario sin título",
+  "idioma": "es",
+  "total_items": 1,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "Relaciona cada ciudad con su país.",
+      "tipo": "emparejamiento",
+      "alternativas": [
+        {
+          "valor": 1,
+          "texto": "Roma"
+        },
+        {
+          "valor": "A",
+          "texto": "Italia"
+        },
+        {
+          "valor": 2,
+          "texto": "Lima"
+        },
+        {
+          "valor": "B",
+          "texto": "Perú"
+        }
+      ],
+      "respuesta_correcta": "1-A,2-B"
+    }
+  ]
+}

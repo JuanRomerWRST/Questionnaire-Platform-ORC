@@ -11,20 +11,19 @@ from app.schemas.questionnaire import Questionnaire
 from app.services.extraction_service import run_deterministic
 
 ROOT = Path(__file__).resolve().parents[3] / "examples"
+PARSERS = {".pdf": PdfParser, ".docx": DocxParser, ".xlsx": XlsxParser}
 
 
-@pytest.mark.parametrize(
-    ("name", "parser"),
-    [
-        ("sample_questionnaire_es.pdf", PdfParser),
-        ("sample_questionnaire_it.docx", DocxParser),
-        ("sample_questionnaire_en.xlsx", XlsxParser),
-    ],
-)
-def test_example_outputs_match_the_pipeline(name, parser):
+def _deterministic_examples():
+    cases = json.loads((ROOT / "cases.json").read_text(encoding="utf-8"))
+    return [case["file"] for case in cases if case["mode"] == "deterministic"]
+
+
+@pytest.mark.parametrize("name", _deterministic_examples())
+def test_example_outputs_match_the_pipeline(name):
     data = (ROOT / "input" / name).read_bytes()
-    expected = json.loads((ROOT / "output" / name.replace(Path(name).suffix, ".json")).read_text(encoding="utf-8"))
-    parsed = parser().parse(data, settings=get_settings())
+    expected = json.loads((ROOT / "output" / Path(name).with_suffix(".json").name).read_text(encoding="utf-8"))
+    parsed = PARSERS[Path(name).suffix]().parse(data, settings=get_settings())
     result = run_deterministic(parsed, threshold=0.7, ocr_used=False, ocr_confidence=None)
     assert result.questionnaire is not None
     assert result.questionnaire.model_dump() == expected

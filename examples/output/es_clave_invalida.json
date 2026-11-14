@@ -1,0 +1,23 @@
+{
+  "titulo": "Clave fuera de las opciones",
+  "idioma": "es",
+  "total_items": 1,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "¿De qué color es el cielo despejado?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "Verde"
+        },
+        {
+          "valor": "B",
+          "texto": "Azul"
+        }
+      ],
+      "respuesta_correcta": null
+    }
+  ]
+}

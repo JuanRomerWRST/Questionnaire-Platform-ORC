@@ -52,6 +52,27 @@ def xlsx_bytes(sheets: dict[str, list[list[str]]]) -> bytes:
     return buffer.getvalue()
 
 
+def raster_bytes(lines: list[str], image_format: str = "PNG") -> bytes:
+    data = image_bytes(lines)
+    if image_format == "PNG":
+        return data
+    image = Image.open(io.BytesIO(data)).convert("RGB")
+    buffer = io.BytesIO()
+    image.save(buffer, format=image_format, quality=90)
+    return buffer.getvalue()
+
+
+def scanned_pdf(lines: list[str]) -> bytes:
+    png = image_bytes(lines)
+    document = pymupdf.open()
+    page = document.new_page(width=1400, height=1800)
+    page.insert_image(pymupdf.Rect(0, 0, 1400, 1800), stream=png)
+    buffer = io.BytesIO()
+    document.save(buffer)
+    document.close()
+    return buffer.getvalue()
+
+
 def image_bytes(lines: list[str], *, rotate: bool = False) -> bytes:
     image = Image.new("RGB", (1400, 1800), "white")
     draw = ImageDraw.Draw(image)

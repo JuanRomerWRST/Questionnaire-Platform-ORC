@@ -1,0 +1,27 @@
+{
+  "titulo": "Sin clave impresa",
+  "idioma": "und",
+  "total_items": 1,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "¿Cuál es el resultado de 2 + 2?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "3"
+        },
+        {
+          "valor": "B",
+          "texto": "4"
+        },
+        {
+          "valor": "C",
+          "texto": "5"
+        }
+      ],
+      "respuesta_correcta": null
+    }
+  ]
+}

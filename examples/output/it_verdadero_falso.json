@@ -1,0 +1,39 @@
+{
+  "titulo": "Questionario vero o falso",
+  "idioma": "it",
+  "total_items": 2,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "Il sole è una stella. (V/F)",
+      "tipo": "verdadero_falso",
+      "alternativas": [
+        {
+          "valor": "V",
+          "texto": "Vero"
+        },
+        {
+          "valor": "F",
+          "texto": "Falso"
+        }
+      ],
+      "respuesta_correcta": "V"
+    },
+    {
+      "numero": 2,
+      "enunciado": "Roma è in Francia. (V/F)",
+      "tipo": "verdadero_falso",
+      "alternativas": [
+        {
+          "valor": "V",
+          "texto": "Vero"
+        },
+        {
+          "valor": "F",
+          "texto": "Falso"
+        }
+      ],
+      "respuesta_correcta": "F"
+    }
+  ]
+}

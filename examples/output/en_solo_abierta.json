@@ -1,0 +1,21 @@
+{
+  "titulo": "Open questions",
+  "idioma": "en",
+  "total_items": 2,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "Describe a recent situation in which you felt under pressure.",
+      "tipo": "desarrollo",
+      "alternativas": [],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 2,
+      "enunciado": "Explain how you organize a study afternoon.",
+      "tipo": "desarrollo",
+      "alternativas": [],
+      "respuesta_correcta": null
+    }
+  ]
+}

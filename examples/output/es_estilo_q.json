@@ -1,0 +1,23 @@
+{
+  "titulo": "Capitales",
+  "idioma": "es",
+  "total_items": 1,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "¿Cuál es la capital de Perú?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "Quito"
+        },
+        {
+          "valor": "B",
+          "texto": "Lima"
+        }
+      ],
+      "respuesta_correcta": "B"
+    }
+  ]
+}
