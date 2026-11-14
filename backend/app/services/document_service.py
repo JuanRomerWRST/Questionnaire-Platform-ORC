@@ -21,7 +21,7 @@ from app.infrastructure.parsers.registry import get_parser
 from app.schemas.document import ExtractOptions
 from app.schemas.metrics import ProcessingMetrics
 from app.schemas.questionnaire import Questionnaire
-from app.schemas.responses import ExtractionResponse, WarningItem
+from app.schemas.responses import ExtractionResponse, ItemSource, WarningItem
 from app.services.extraction_service import DeterministicResult, run_deterministic
 from app.services.metrics_service import MetricsService
 from app.utils.file_utils import read_upload_limited, safe_extension
@@ -169,12 +169,16 @@ async def _process(
             deterministic.confidence.score,
         )
     deps.metrics.record(metrics, llm_error=llm_error)
+    sources = []
+    if questionnaire is deterministic.questionnaire:
+        sources = [ItemSource(numero=numero, pagina=pagina) for numero, pagina in deterministic.sources]
     return ExtractionResponse(
         request_id=deps.request_id,
         status=status,
         questionnaire=questionnaire,
         metrics=metrics,
         warnings=[WarningItem(code=code, message=message) for code, message in warnings],
+        sources=sources,
     )
 
 

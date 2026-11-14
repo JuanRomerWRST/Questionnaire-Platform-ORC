@@ -25,6 +25,7 @@ class DeterministicResult:
     confidence: ConfidenceReport = field(default_factory=lambda: ConfidenceReport(0, [], True))
     text: str = ""
     ocr_used: bool = False
+    sources: list[tuple[int, int]] = field(default_factory=list)
 
 
 def run_deterministic(
@@ -58,9 +59,10 @@ def run_deterministic(
         confidence.score = round(max(0.0, confidence.score - 0.05), 2)
     warnings.extend(confidence.warnings)
     questionnaire = _build(choose_title(lines, detection.preamble), language, detection.items)
+    sources = [(item.numero, item.pagina) for item in detection.items if item.tipo is not None and item.pagina]
     if questionnaire is None and detection.items:
         warnings.append(("LOW_CONFIDENCE", "Los ítems detectados no pasaron la validación del contrato."))
-    return DeterministicResult(questionnaire, _unique(warnings), confidence, text, ocr_used)
+    return DeterministicResult(questionnaire, _unique(warnings), confidence, text, ocr_used, sources)
 
 
 def choose_title(lines: list[TextLine], preamble: list[str]) -> str:

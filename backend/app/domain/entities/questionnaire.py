@@ -19,6 +19,7 @@ class DraftItem:
     type_hint: str | None = None
     matching: bool = False
     tipo: QuestionType | None = None
+    pagina: int | None = None
     conflicts: list[str] = field(default_factory=list)
 
 

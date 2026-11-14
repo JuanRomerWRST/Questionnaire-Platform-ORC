@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, PositiveInt
 
 from app.schemas.metrics import ProcessingMetrics
 from app.schemas.questionnaire import Questionnaire
@@ -13,6 +13,13 @@ class WarningItem(BaseModel):
     message: str
 
 
+class ItemSource(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    numero: PositiveInt
+    pagina: PositiveInt
+
+
 class ExtractionResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -21,6 +28,7 @@ class ExtractionResponse(BaseModel):
     questionnaire: Questionnaire
     metrics: ProcessingMetrics
     warnings: list[WarningItem] = Field(default_factory=list)
+    sources: list[ItemSource] = Field(default_factory=list)
 
 
 class ErrorBody(BaseModel):

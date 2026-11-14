@@ -55,14 +55,14 @@ def detect_items(lines: list[TextLine]) -> DetectionResult:
         if _matches(PATTERNS["matching_header"], text):
             current = _close(current, result)
             number = result.items[-1].numero + 1 if result.items else 1
-            current = DraftItem(numero=number, enunciado=text, matching=True)
+            current = DraftItem(numero=number, enunciado=text, matching=True, pagina=line.page)
             matching = True
             continue
         question = _question(text)
         if question and _is_new_question(question, current, question_style):
             current = _close(current, result)
             stem, inline = _split_inline(question.text)
-            current = DraftItem(numero=question.number, enunciado=stem, options=inline)
+            current = DraftItem(numero=question.number, enunciado=stem, options=inline, pagina=line.page)
             question_style = question.style
             matching = False
             continue
@@ -237,7 +237,7 @@ def _unnumbered_pass(lines: list[TextLine], result: DetectionResult) -> None:
     for line in lines:
         text = line.text.strip()
         if text.endswith("?") or text.startswith("¿"):
-            result.items.append(DraftItem(numero=number, enunciado=text))
+            result.items.append(DraftItem(numero=number, enunciado=text, pagina=line.page))
             number += 1
 
 
