@@ -1,0 +1,98 @@
+{
+  "titulo": "Cuestionario de hábitos de estudio",
+  "idioma": "es",
+  "total_items": 5,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "¿Cuál es el resultado de 2 + 2?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "3"
+        },
+        {
+          "valor": "B",
+          "texto": "4"
+        },
+        {
+          "valor": "C",
+          "texto": "5"
+        }
+      ],
+      "respuesta_correcta": "B"
+    },
+    {
+      "numero": 2,
+      "enunciado": "El sol es una estrella. (V/F)",
+      "tipo": "verdadero_falso",
+      "alternativas": [
+        {
+          "valor": "V",
+          "texto": "Verdadero"
+        },
+        {
+          "valor": "F",
+          "texto": "Falso"
+        }
+      ],
+      "respuesta_correcta": "V"
+    },
+    {
+      "numero": 3,
+      "enunciado": "Describa una estrategia que usa para concentrarse.",
+      "tipo": "desarrollo",
+      "alternativas": [],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 4,
+      "enunciado": "Me resulta fácil empezar las tareas difíciles.",
+      "tipo": "escala_likert",
+      "alternativas": [
+        {
+          "valor": 0,
+          "texto": "Nunca"
+        },
+        {
+          "valor": 1,
+          "texto": "A veces"
+        },
+        {
+          "valor": 2,
+          "texto": "A menudo"
+        },
+        {
+          "valor": 3,
+          "texto": "Siempre"
+        }
+      ],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 5,
+      "enunciado": "Relaciona cada ciudad con su país.",
+      "tipo": "emparejamiento",
+      "alternativas": [
+        {
+          "valor": 1,
+          "texto": "Roma"
+        },
+        {
+          "valor": "A",
+          "texto": "Italia"
+        },
+        {
+          "valor": 2,
+          "texto": "Lima"
+        },
+        {
+          "valor": "B",
+          "texto": "Perú"
+        }
+      ],
+      "respuesta_correcta": null
+    }
+  ]
+}

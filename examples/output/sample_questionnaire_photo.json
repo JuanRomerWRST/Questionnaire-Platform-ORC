@@ -1,0 +1,43 @@
+{
+  "titulo": "Cuestionario de hábitos de estudio",
+  "idioma": "es",
+  "total_items": 2,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "¿Cuál es el resultado de 2 + 2?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "3"
+        },
+        {
+          "valor": "B",
+          "texto": "4"
+        },
+        {
+          "valor": "C",
+          "texto": "5"
+        }
+      ],
+      "respuesta_correcta": "B"
+    },
+    {
+      "numero": 2,
+      "enunciado": "El sol es una estrella. (V/F)",
+      "tipo": "verdadero_falso",
+      "alternativas": [
+        {
+          "valor": "V",
+          "texto": "Verdadero"
+        },
+        {
+          "valor": "F",
+          "texto": "Falso"
+        }
+      ],
+      "respuesta_correcta": "V"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "titulo": "Items",
+  "idioma": "en",
+  "total_items": 5,
+  "items": [
+    {
+      "numero": 1,
+      "enunciado": "What number completes the series 2, 4, 8, 16?",
+      "tipo": "seleccion_multiple",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "18"
+        },
+        {
+          "valor": "B",
+          "texto": "24"
+        },
+        {
+          "valor": "C",
+          "texto": "32"
+        }
+      ],
+      "respuesta_correcta": "C"
+    },
+    {
+      "numero": 2,
+      "enunciado": "The sun is a star.",
+      "tipo": "verdadero_falso",
+      "alternativas": [
+        {
+          "valor": "A",
+          "texto": "True"
+        },
+        {
+          "valor": "B",
+          "texto": "False"
+        }
+      ],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 3,
+      "enunciado": "Describe a recent situation in which you felt under pressure.",
+      "tipo": "desarrollo",
+      "alternativas": [],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 4,
+      "enunciado": "I worry about minor things.",
+      "tipo": "escala_likert",
+      "alternativas": [
+        {
+          "valor": 0,
+          "texto": "Never"
+        },
+        {
+          "valor": 1,
+          "texto": "Sometimes"
+        },
+        {
+          "valor": 2,
+          "texto": "Often"
+        },
+        {
+          "valor": 3,
+          "texto": "Always"
+        }
+      ],
+      "respuesta_correcta": null
+    },
+    {
+      "numero": 5,
+      "enunciado": "Match each city with its country.",
+      "tipo": "emparejamiento",
+      "alternativas": [
+        {
+          "valor": 1,
+          "texto": "Rome"
+        },
+        {
+          "valor": "A",
+          "texto": "Italy"
+        },
+        {
+          "valor": 2,
+          "texto": "Lima"
+        },
+        {
+          "valor": "B",
+          "texto": "Peru"
+        }
+      ],
+      "respuesta_correcta": "1-A,2-B"
+    }
+  ]
+}
