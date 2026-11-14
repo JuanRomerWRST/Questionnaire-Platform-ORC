@@ -1,5 +1,5 @@
 import { API_URL } from "@/lib/constants";
-import type { Capabilities, ExtractionResponse } from "@/types/api.types";
+import type { AggregatedMetrics, Capabilities, ExtractionResponse } from "@/types/api.types";
 
 export class ApiError extends Error {
   constructor(
@@ -34,6 +34,10 @@ export async function getJson<T>(path: string): Promise<T> {
 
 export function getCapabilities(): Promise<Capabilities> {
   return getJson<Capabilities>("/documents/capabilities");
+}
+
+export function getMetrics(): Promise<AggregatedMetrics> {
+  return getJson<AggregatedMetrics>("/metrics");
 }
 
 export function uploadDocument(

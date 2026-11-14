@@ -41,6 +41,26 @@ export interface ProcessingMetrics {
   confidence_score: number;
 }
 
+export interface AggregatedMetrics {
+  scope: string;
+  requests_total: number;
+  requests_success: number;
+  requests_failed: number;
+  requests_partial: number;
+  in_flight: number;
+  max_concurrency: number;
+  latency_avg_ms: number;
+  latency_p50_ms: number | null;
+  latency_p95_ms: number | null;
+  latency_p99_ms: number | null;
+  throughput_rps: number;
+  avg_stage_ms: Record<string, number>;
+  llm_usage_ratio: number;
+  llm_error_rate: number;
+  tokens_input_total: number;
+  tokens_output_total: number;
+}
+
 export interface ExtractionResponse {
   request_id: string;
   status: "success" | "partial";
