@@ -12,7 +12,7 @@ export default function OverviewPage() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center">
       <p className="text-sm text-muted-foreground">Inteligencia documental</p>
-      <h1 className="mt-3 max-w-xl text-5xl font-semibold tracking-tight text-balance">El cuestionario, ya estructurado.</h1>
+      <h1 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">El cuestionario, ya estructurado.</h1>
       <p className="mt-5 max-w-lg text-lg leading-8 text-muted-foreground">
         Sube un documento y obtén ítems, alternativas e idioma en un JSON estable. El modelo solo entra si las reglas no bastan.
       </p>

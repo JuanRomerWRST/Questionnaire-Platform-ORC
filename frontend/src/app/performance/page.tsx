@@ -35,10 +35,10 @@ export default function PerformancePage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className="flex items-end justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
           <p className="text-sm text-muted-foreground">Laboratorio</p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight">Rendimiento de este proceso</h1>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Rendimiento de este proceso</h1>
         </div>
         <Button type="button" variant="outline" onClick={load} disabled={loading}>
           <RefreshCw size={16} aria-hidden="true" />

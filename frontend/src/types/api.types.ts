@@ -61,10 +61,16 @@ export interface AggregatedMetrics {
   tokens_output_total: number;
 }
 
+export interface ItemSource {
+  numero: number;
+  pagina: number;
+}
+
 export interface ExtractionResponse {
   request_id: string;
   status: "success" | "partial";
   questionnaire: Questionnaire;
   metrics: ProcessingMetrics;
   warnings: WarningItem[];
+  sources?: ItemSource[];
 }

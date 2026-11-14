@@ -15,7 +15,7 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <p className="text-sm text-muted-foreground">Preferencias de esta máquina</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight">Ajustes</h1>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Ajustes</h1>
       <p className="mt-4 text-muted-foreground">
         Aquí no se guardan claves. La API de OpenAI vive solo en el servidor.
       </p>
@@ -50,7 +50,7 @@ function Setting({
 }) {
   const id = label.replaceAll(" ", "-").toLowerCase();
   return (
-    <li className="flex items-center justify-between gap-6 px-5 py-4">
+    <li className="flex flex-col items-start gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
       <div>
         <label htmlFor={id} className="text-sm font-medium">
           {label}
