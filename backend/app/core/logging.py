@@ -3,6 +3,14 @@ import logging
 import sys
 
 
+class RequestIdFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        from app.infrastructure.observability.request_context import request_id_var
+
+        record.request_id = request_id_var.get()
+        return True
+
+
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         payload: dict[str, object] = {
@@ -21,6 +29,7 @@ class JsonFormatter(logging.Formatter):
 def configure_logging(level: str) -> None:
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
+    handler.addFilter(RequestIdFilter())
     root = logging.getLogger()
     root.handlers.clear()
     root.addHandler(handler)
