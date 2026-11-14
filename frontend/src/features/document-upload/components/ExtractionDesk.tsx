@@ -4,11 +4,11 @@ import { FileText, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { FilePreview } from "@/features/document-upload/components/FilePreview";
 import { useFileUpload } from "@/features/document-upload/hooks/useFileUpload";
 import { useProcessing } from "@/features/processing/hooks/useProcessing";
 import { useCapabilities } from "@/hooks/useCapabilities";
 import { readPreferences, subscribePreferences, writePreferences, type Preferences } from "@/lib/preferences";
+import { rememberPreview } from "@/lib/preview-store";
 import { writeResult } from "@/lib/result-store";
 import { formatBytes } from "@/lib/utils";
 
@@ -22,10 +22,41 @@ export function ExtractionDesk() {
   const { file, setFile } = useFileUpload();
   const processing = useProcessing(capabilities.max_upload_size_mb, extensions);
   const [active, setActive] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    function keepInPage(event: DragEvent) {
+      event.preventDefault();
+    }
+    window.addEventListener("dragover", keepInPage);
+    window.addEventListener("drop", keepInPage);
+    return () => {
+      window.removeEventListener("dragover", keepInPage);
+      window.removeEventListener("drop", keepInPage);
+    };
+  }, []);
+
+  function choose(next: File) {
+    setPreviewUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return next.type.startsWith("image/") ? URL.createObjectURL(next) : null;
+    });
+    setFile(next);
+    processing.setState("selected");
+  }
   const busy = ["validating", "uploading", "processing"].includes(processing.state);
+
+  useEffect(() => {
+    if (!busy) return;
+    const started = Date.now();
+    const timer = window.setInterval(() => setElapsed(Date.now() - started), 200);
+    return () => window.clearInterval(timer);
+  }, [busy]);
 
   async function start() {
     if (!file) return;
+    rememberPreview(file);
     await processing.process(file, { useLlm: preferences.useLlm, forceOcr: preferences.forceOcr });
   }
 
@@ -38,48 +69,71 @@ export function ExtractionDesk() {
   return (
     <div className="mx-auto max-w-3xl">
       <p className="text-sm text-muted-foreground">Nueva extracción</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight">Suelta el cuestionario</h1>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Suelta el cuestionario</h1>
       <p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground">
         PDF, Word, Excel o una fotografía legible. El servidor valida el archivo antes de leerlo.
       </p>
 
-      <label
-        htmlFor={inputId}
-        onDragOver={(event) => {
+      <div
+        data-dropzone
+        onDragEnter={(event) => {
           event.preventDefault();
           setActive(true);
         }}
-        onDragLeave={() => setActive(false)}
+        onDragOver={(event) => {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "copy";
+          setActive(true);
+        }}
+        onDragLeave={(event) => {
+          if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+          setActive(false);
+        }}
         onDrop={(event) => {
           event.preventDefault();
           setActive(false);
           const next = event.dataTransfer.files?.[0];
-          if (next) {
-            setFile(next);
-            processing.setState("selected");
-          }
+          if (next) choose(next);
         }}
-        className={`mt-8 flex min-h-64 cursor-pointer flex-col items-center justify-center rounded-3xl border bg-card px-6 text-center transition duration-200 ${active ? "border-accent" : "border-border hover:border-accent"}`}
+        className={`mt-8 flex min-h-64 flex-col items-center justify-center rounded-3xl border bg-card px-6 py-8 text-center transition duration-200 ${active ? "border-accent bg-blue-50" : "border-border"}`}
       >
-        <span className="grid h-12 w-12 place-items-center rounded-full bg-accent text-white">
-          <Upload size={20} aria-hidden="true" />
-        </span>
-        <span className="mt-4 text-lg font-medium">Arrastra el archivo o elige uno</span>
-        <span className="mt-1 text-sm text-muted-foreground">Enter abre el selector cuando esta zona tiene el foco.</span>
-        <input
-          id={inputId}
-          className="sr-only"
-          type="file"
-          accept={extensions.join(",")}
-          onChange={(event) => {
-            const next = event.target.files?.[0];
-            if (next) {
-              setFile(next);
-              processing.setState("selected");
-            }
-          }}
-        />
-      </label>
+        {file ? (
+          <div className="w-full max-w-md text-left">
+            {previewUrl ? (
+              // The preview is the file the user just dropped.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={previewUrl} alt="" className="mb-4 max-h-48 w-full rounded-xl border border-border object-contain bg-white" />
+            ) : (
+              <span className="mb-4 grid h-12 w-12 place-items-center rounded-full bg-accent text-white">
+                <FileText size={20} aria-hidden="true" />
+              </span>
+            )}
+            <p className="text-base font-medium break-all">{file.name}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{formatBytes(file.size)} listos para procesar</p>
+          </div>
+        ) : (
+          <>
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-accent text-white">
+              <Upload size={20} aria-hidden="true" />
+            </span>
+            <span className="mt-4 text-lg font-medium">Arrastra el archivo aquí</span>
+            <span className="mt-1 text-sm text-muted-foreground">o elige uno desde el equipo</span>
+          </>
+        )}
+        <label htmlFor={inputId} className="mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium">
+          Elegir archivo
+          <input
+            id={inputId}
+            className="sr-only"
+            type="file"
+            accept={extensions.join(",")}
+            onChange={(event) => {
+              const next = event.target.files?.[0];
+              if (next) choose(next);
+            }}
+          />
+        </label>
+      </div>
 
       <ul className="mt-4 flex flex-wrap gap-2" aria-label="Formatos soportados">
         {extensions.map((extension) => (
@@ -93,41 +147,32 @@ export function ExtractionDesk() {
       </p>
       {offline ? <p className="mt-3 text-sm text-destructive">La API no responde.</p> : null}
 
-      {file ? (
-        <div className="mt-6 rounded-2xl border border-border bg-card p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium">
-            <FileText size={16} aria-hidden="true" />
-            Archivo seleccionado
-          </div>
-          <FilePreview file={file} />
-        </div>
-      ) : null}
-
-      {processing.state === "uploading" && processing.progress !== null ? (
-        <div className="mt-6">
-          <div className="mb-2 flex justify-between text-sm text-muted-foreground">
-            <span>Subida</span>
-            <span>{Math.round(processing.progress * 100)}%</span>
-          </div>
-          <div
-            className="h-1.5 overflow-hidden rounded-full bg-muted"
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(processing.progress * 100)}
-            aria-label="Progreso de subida"
-          >
-            <div className="h-full bg-accent" style={{ width: `${processing.progress * 100}%` }} />
-          </div>
-        </div>
-      ) : null}
-
-      {processing.state === "processing" || processing.state === "validating" ? (
+      {busy ? (
         <div className="mt-6 rounded-2xl border border-border bg-card p-5" aria-live="polite">
-          <p className="font-medium">{processing.state === "validating" ? "Comprobando el archivo" : "Extrayendo en el servidor"}</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            No hay un porcentaje de esta etapa. La respuesta llega cuando el backend termina.
+          <p className="font-medium">
+            {processing.state === "validating"
+              ? "Comprobando el archivo"
+              : processing.state === "uploading"
+                ? "Subiendo el archivo"
+                : "El servidor está leyendo el documento"}
           </p>
+          <p className="mt-1 text-sm text-muted-foreground">Llevamos {(elapsed / 1000).toFixed(1)} s. Esta cifra es el reloj real, no un avance estimado.</p>
+          {processing.state === "uploading" && processing.progress !== null ? (
+            <div
+              className="mt-4 h-1.5 overflow-hidden rounded-full bg-muted"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(processing.progress * 100)}
+              aria-label="Progreso de subida"
+            >
+              <div className="h-full bg-accent" style={{ width: `${processing.progress * 100}%` }} />
+            </div>
+          ) : (
+            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-muted" role="status" aria-label="Extracción en curso">
+              <div className="h-full w-1/3 animate-[slide_1.2s_ease-in-out_infinite] bg-accent" />
+            </div>
+          )}
         </div>
       ) : null}
 
