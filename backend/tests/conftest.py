@@ -1,8 +1,10 @@
 import os
 
-os.environ.setdefault("OPENAI_ENABLED", "false")
-os.environ.setdefault("OPENAI_API_KEY", "")
-os.environ.setdefault("APP_ENV", "test")
+os.environ["OPENAI_ENABLED"] = "false"
+os.environ["OPENAI_API_KEY"] = ""
+os.environ["OPENAI_MODEL"] = ""
+os.environ["LLM_PROVIDER"] = "openai"
+os.environ["APP_ENV"] = "test"
 
 import pytest
 from httpx import ASGITransport, AsyncClient

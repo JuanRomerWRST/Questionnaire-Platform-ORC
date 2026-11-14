@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -32,7 +33,7 @@ class Settings(BaseSettings):
     llm_image_max_side: int = 2048
 
     openai_enabled: bool = False
-    openai_api_key: str = ""
+    openai_api_key: str = Field(default="", repr=False)
     openai_model: str = ""
     openai_timeout_seconds: int = 45
     openai_max_retries: int = 2
