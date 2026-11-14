@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -27,7 +28,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="mx-auto flex min-h-screen max-w-[1440px]">
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-border bg-card px-4 py-6 lg:flex">
           <Link href="/" className="mb-8 flex items-center gap-3 rounded-xl px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-sm font-semibold text-white">QI</span>
+            <Logo className="h-9 w-9 shrink-0" />
             <span>
               <span className="block text-sm font-semibold tracking-tight">Questionnaire</span>
               <span className="block text-xs text-muted-foreground">Intelligence</span>
@@ -55,8 +56,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur lg:hidden">
-            <div className="flex gap-1 overflow-x-auto px-3 py-2">
+          <header className="sticky top-0 z-10 max-w-full border-b border-border bg-card/95 backdrop-blur lg:hidden">
+            <Link href="/" className="flex items-center gap-2 px-4 pt-3">
+              <Logo className="h-8 w-8 shrink-0" />
+              <span className="text-sm font-semibold tracking-tight">Questionnaire</span>
+            </Link>
+            <div className="flex max-w-full gap-1 overflow-x-auto px-3 py-2">
               {LINKS.map((link) => (
                 <Link
                   key={link.href}
@@ -71,7 +76,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               ))}
             </div>
           </header>
-          <main className="flex-1 px-5 py-8 sm:px-8 lg:px-12">{children}</main>
+          <main className="min-w-0 flex-1 px-4 py-6 sm:px-8 sm:py-8 lg:px-12">{children}</main>
         </div>
       </div>
     </div>

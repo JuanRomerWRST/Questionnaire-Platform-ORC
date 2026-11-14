@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Questionnaire Intelligence",
   description: "Extrae cuestionarios a un JSON estable desde PDF, Office e imágenes.",
+  icons: { icon: "/icons/logo.svg" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
