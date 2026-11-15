@@ -144,12 +144,13 @@ def _map_error(exc: Exception) -> Exception:
         return LLMAuthError("La API de OpenAI rechazó la autenticación.")
     if name == "RateLimitError":
         code = getattr(exc, "code", "") or ""
-        if code == "insufficient_quota" or "insufficient_quota" in message:
+        if code in {"insufficient_quota", "credit_balance_exhausted"} or "insufficient_quota" in message:
             return LLMQuotaError("La cuenta de OpenAI no tiene saldo disponible.")
-        retry_after = _retry_after(exc)
-        error = LLMUnavailableError("OpenAI aplicó un límite de tasa.")
-        error.retry_after = retry_after
-        return error
+        return LLMError(
+            "OpenAI aplicó un límite de tasa.",
+            transient=False,
+            retry_after=_retry_after(exc),
+        )
     if name in {"APITimeoutError", "APIConnectionError"}:
         return LLMTimeoutError()
     status = getattr(exc, "status_code", None)
