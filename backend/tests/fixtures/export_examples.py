@@ -1,4 +1,4 @@
-"""Genera los cuestionarios sintéticos de examples/ a partir del pipeline real."""
+"""Genera los cuestionarios sintéticos de docs/examples/ a partir del pipeline real."""
 
 import json
 from pathlib import Path
@@ -10,7 +10,7 @@ from app.infrastructure.parsers.xlsx_parser import XlsxParser
 from app.services.extraction_service import run_deterministic
 from tests.fixtures.builders import SPANISH_LINES, docx_bytes, pdf_bytes, raster_bytes, scanned_pdf, xlsx_bytes
 
-ROOT = Path(__file__).resolve().parents[3] / "examples"
+ROOT = Path(__file__).resolve().parents[3] / "docs" / "examples"
 ITALIAN = [
     "Questionario di esempio",
     "1. Mi preoccupo eccessivamente per cose di poca importanza.",

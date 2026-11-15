@@ -10,7 +10,7 @@ from app.infrastructure.parsers.xlsx_parser import XlsxParser
 from app.schemas.questionnaire import Questionnaire
 from app.services.extraction_service import run_deterministic
 
-ROOT = Path(__file__).resolve().parents[3] / "examples"
+ROOT = Path(__file__).resolve().parents[3] / "docs" / "examples"
 PARSERS = {".pdf": PdfParser, ".docx": DocxParser, ".xlsx": XlsxParser}
 
 

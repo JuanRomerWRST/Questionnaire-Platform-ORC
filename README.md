@@ -126,7 +126,7 @@ El daemon de Docker no estaba en marcha en la máquina de desarrollo, así que `
 | `GET` | `/api/v1/metrics` | Agregados de esta instancia |
 
 ```bash
-curl -F "file=@examples/input/sample_questionnaire_es.pdf" http://localhost:8000/api/v1/documents/extract
+curl -F "file=@docs/examples/input/sample_questionnaire_es.pdf" http://localhost:8000/api/v1/documents/extract
 ```
 
 Campos opcionales del formulario: `use_llm=true|false` y `force_ocr=true|false`.
@@ -174,10 +174,10 @@ Una solicitud en frío del mismo PDF tardó 529 ms y devolvió 5 ítems sin usar
 
 | Entrada | Salida |
 | --- | --- |
-| `examples/input/sample_questionnaire_es.pdf` | `examples/output/sample_questionnaire_es.json` |
-| `examples/input/sample_questionnaire_it.docx` | `examples/output/sample_questionnaire_it.json` |
-| `examples/input/sample_questionnaire_en.xlsx` | `examples/output/sample_questionnaire_en.json` |
-| `examples/input/sample_questionnaire_photo.jpg` | `examples/output/sample_questionnaire_photo.json` |
+| `docs/examples/input/sample_questionnaire_es.pdf` | `docs/examples/output/sample_questionnaire_es.json` |
+| `docs/examples/input/sample_questionnaire_it.docx` | `docs/examples/output/sample_questionnaire_it.json` |
+| `docs/examples/input/sample_questionnaire_en.xlsx` | `docs/examples/output/sample_questionnaire_en.json` |
+| `docs/examples/input/sample_questionnaire_photo.jpg` | `docs/examples/output/sample_questionnaire_photo.json` |
 
 Son cuestionarios inventados. El JSON de la foto corresponde al texto impreso en la imagen; sin Tesseract local no se comparó contra un OCR real.
 

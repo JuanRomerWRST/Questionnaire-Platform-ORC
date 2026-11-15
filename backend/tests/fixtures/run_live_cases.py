@@ -1,6 +1,6 @@
 """Corre los casos visuales y de baja confianza contra la API local.
 
-No imprime secretos. Guarda el cuestionario y un informe corto en examples/output/live.
+No imprime secretos. Guarda el cuestionario y un informe corto en docs/examples/output/live.
 """
 
 import json
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import httpx
 
-ROOT = Path(__file__).resolve().parents[3] / "examples"
+ROOT = Path(__file__).resolve().parents[3] / "docs" / "examples"
 API = "http://127.0.0.1:8000/api/v1/documents/extract"
 
 
