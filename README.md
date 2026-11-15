@@ -2,7 +2,7 @@
 
 Aplicación web para convertir un cuestionario en PDF, DOCX, XLSX o imagen en un JSON estable. Las reglas locales hacen la extracción. Tesseract lee las imágenes y los PDF sin texto. Un modelo con visión solo interviene cuando la estructura no es confiable y hay una clave configurada.
 
-Para probarla: [https://questionnaire-platform-qwohe5lp6-juanromerwrsts-projects.vercel.app/](https://questionnaire-platform-qwohe5lp6-juanromerwrsts-projects.vercel.app/). Los documentos para subir están en `docs/examples/input`.
+Para probarla: [https://questionnaire-platform-orc.vercel.app/](https://questionnaire-platform-orc.vercel.app/). Los documentos para subir están en `docs/examples/input`.
 
 ## Arquitectura
 
