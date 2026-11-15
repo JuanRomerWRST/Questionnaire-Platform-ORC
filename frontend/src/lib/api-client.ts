@@ -36,8 +36,28 @@ export function getCapabilities(): Promise<Capabilities> {
   return getJson<Capabilities>("/documents/capabilities");
 }
 
-export function getMetrics(): Promise<AggregatedMetrics> {
-  return getJson<AggregatedMetrics>("/metrics");
+export async function getMetrics(): Promise<AggregatedMetrics> {
+  try {
+    return await getJson<AggregatedMetrics>("/metrics");
+  } catch (error) {
+    if (error instanceof ApiError && error.code === "NETWORK_ERROR" && (await healthReachable())) {
+      throw new ApiError(
+        "BLOCKED_BY_CLIENT",
+        0,
+        "Desactiva el adblock. Está bloqueando la consulta de métricas.",
+      );
+    }
+    throw error;
+  }
+}
+
+async function healthReachable(): Promise<boolean> {
+  try {
+    const response = await fetch(`${apiUrl()}/health`, { cache: "no-store" });
+    return response.ok;
+  } catch {
+    return false;
+  }
 }
 
 export function uploadDocument(
