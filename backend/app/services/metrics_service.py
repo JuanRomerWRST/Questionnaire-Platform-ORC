@@ -10,10 +10,10 @@ class MetricsService:
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._samples: deque[ProcessingMetrics] = deque(maxlen=1000)
+        self._llm_errors: deque[bool] = deque(maxlen=1000)
         self._in_flight = 0
         self._max_concurrency = 0
         self._started = time.perf_counter()
-        self._llm_errors = 0
 
     def start(self) -> None:
         with self._lock:
@@ -27,16 +27,15 @@ class MetricsService:
     def record(self, metrics: ProcessingMetrics, *, llm_error: bool = False) -> None:
         with self._lock:
             self._samples.append(metrics)
-            if llm_error:
-                self._llm_errors += 1
+            self._llm_errors.append(llm_error)
 
     def snapshot(self) -> AggregatedMetrics:
         with self._lock:
             samples = list(self._samples)
+            llm_errors = sum(1 for failed in self._llm_errors if failed)
             in_flight = self._in_flight
             max_concurrency = self._max_concurrency
             elapsed = max(time.perf_counter() - self._started, 0.001)
-            llm_errors = self._llm_errors
         total = len(samples)
         latencies = [sample.total_processing_ms for sample in samples]
         success = sum(1 for sample in samples if sample.status == "success")
@@ -69,7 +68,7 @@ class MetricsService:
             throughput_rps=round(total / elapsed, 4),
             avg_stage_ms=averages,
             llm_usage_ratio=round(llm_used / total, 4) if total else 0,
-            llm_error_rate=round(llm_errors / llm_used, 4) if llm_used else 0,
+            llm_error_rate=round(llm_errors / llm_used, 4) if llm_used else 0.0,
             tokens_input_total=sum(sample.input_tokens or 0 for sample in samples),
             tokens_output_total=sum(sample.output_tokens or 0 for sample in samples),
         )

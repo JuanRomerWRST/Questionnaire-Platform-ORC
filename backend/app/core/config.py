@@ -48,7 +48,14 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        twins: list[str] = []
+        for origin in origins:
+            if "://localhost" in origin:
+                twins.append(origin.replace("://localhost", "://127.0.0.1", 1))
+            elif "://127.0.0.1" in origin:
+                twins.append(origin.replace("://127.0.0.1", "://localhost", 1))
+        return list(dict.fromkeys([*origins, *twins]))
 
     @property
     def max_upload_bytes(self) -> int:

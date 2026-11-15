@@ -353,6 +353,7 @@ def _record_failure(deps: ProcessDeps, timer: StageTimer, file_type: str, llm_er
             total_processing_ms=round(timer.total_ms(), 2),
             items_detected=0,
             status="failed",
+            llm_used=llm_error,
         ),
         llm_error=llm_error,
     )

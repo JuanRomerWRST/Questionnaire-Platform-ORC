@@ -22,7 +22,7 @@ WORKDIR /app
 FROM base AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:0.13.8 /uv /usr/local/bin/uv
-COPY pyproject.toml uv.lock .python-version ./
+COPY pyproject.toml uv.lock .python-version README.md ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY app ./app
 RUN uv sync --frozen --no-dev
