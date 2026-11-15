@@ -1,30 +1,30 @@
 import type { Questionnaire } from "@/features/questionnaire/types/questionnaire.types";
 
 export function downloadQuestionnaire(questionnaire: Questionnaire, filename: string) {
-  const blob = new Blob([JSON.stringify(questionnaire, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename.endsWith(".json") ? filename : `${filename}.json`;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  const name = filename.endsWith(".json") ? filename : `${filename}.json`;
+  saveFile(new Blob([JSON.stringify(questionnaire, null, 2)], { type: "application/json" }), name);
 }
 
 export function downloadAnswersPdf(questionnaire: Questionnaire, filename: string) {
+  const name = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
   const bytes = buildAnswersPdf(questionnaire);
   const copy = new ArrayBuffer(bytes.byteLength);
   new Uint8Array(copy).set(bytes);
-  const blob = new Blob([copy], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
+  saveFile(new Blob([copy], { type: "application/pdf" }), name);
+}
+
+function saveFile(blob: Blob, filename: string) {
+  const file = new File([blob], filename, { type: blob.type });
+  const url = URL.createObjectURL(file);
   const link = document.createElement("a");
   link.href = url;
-  link.download = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+  link.download = filename;
   document.body.append(link);
   link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => {
+    link.remove();
+    URL.revokeObjectURL(url);
+  }, 1500);
 }
 
 const TYPE_LABEL: Record<Questionnaire["items"][number]["tipo"], string> = {

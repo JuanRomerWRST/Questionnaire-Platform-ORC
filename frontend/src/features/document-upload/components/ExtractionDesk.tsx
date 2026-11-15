@@ -2,7 +2,7 @@
 
 import { FileText, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { useFileUpload } from "@/features/document-upload/hooks/useFileUpload";
 import { useProcessing } from "@/features/processing/hooks/useProcessing";
@@ -14,7 +14,7 @@ import { formatBytes } from "@/lib/utils";
 
 export function ExtractionDesk() {
   const router = useRouter();
-  const inputId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
   const { capabilities, offline } = useCapabilities();
   const extensions = capabilities.formats.map((format) => format.extension);
   const [preferences, setPreferences] = useState<Preferences>(readPreferences);
@@ -76,6 +76,15 @@ export function ExtractionDesk() {
 
       <div
         data-dropzone
+        role="button"
+        tabIndex={0}
+        onClick={() => inputRef.current?.click()}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
         onDragEnter={(event) => {
           event.preventDefault();
           setActive(true);
@@ -95,7 +104,7 @@ export function ExtractionDesk() {
           const next = event.dataTransfer.files?.[0];
           if (next) choose(next);
         }}
-        className={`mt-8 flex min-h-64 flex-col items-center justify-center rounded-3xl border bg-card px-6 py-8 text-center transition duration-200 ${active ? "border-accent bg-blue-50" : "border-border"}`}
+        className={`mt-8 flex min-h-64 cursor-pointer flex-col items-center justify-center rounded-3xl border bg-card px-6 py-8 text-center transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${active ? "border-accent bg-blue-50" : "border-border"}`}
       >
         {file ? (
           <div className="w-full max-w-md text-left">
@@ -116,23 +125,22 @@ export function ExtractionDesk() {
             <span className="grid h-12 w-12 place-items-center rounded-full bg-accent text-white">
               <Upload size={20} aria-hidden="true" />
             </span>
-            <span className="mt-4 text-lg font-medium">Arrastra el archivo aquí</span>
-            <span className="mt-1 text-sm text-muted-foreground">o elige uno desde el equipo</span>
+            <span className="mt-4 text-lg font-medium">Haz clic o arrastra el archivo</span>
+            <span className="mt-1 text-sm text-muted-foreground">PDF, Word, Excel o una imagen</span>
           </>
         )}
-        <label htmlFor={inputId} className="mt-4 inline-flex min-h-11 cursor-pointer items-center rounded-full border border-border bg-white px-4 text-sm font-medium">
-          Elegir archivo
-          <input
-            id={inputId}
-            className="sr-only"
-            type="file"
-            accept={extensions.join(",")}
-            onChange={(event) => {
-              const next = event.target.files?.[0];
-              if (next) choose(next);
-            }}
-          />
-        </label>
+        <input
+          ref={inputRef}
+          className="sr-only"
+          type="file"
+          accept={extensions.join(",")}
+          onClick={(event) => event.stopPropagation()}
+          onChange={(event) => {
+            const next = event.target.files?.[0];
+            if (next) choose(next);
+            event.currentTarget.value = "";
+          }}
+        />
       </div>
 
       <ul className="mt-4 flex flex-wrap gap-2" aria-label="Formatos soportados">
