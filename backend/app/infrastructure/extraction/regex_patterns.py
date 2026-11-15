@@ -23,8 +23,8 @@ def compile_patterns() -> dict[str, list[re.Pattern[str]]]:
             re.compile(r"^\s*0*(\d{1,3})\s+(?=[¿¡\"“A-ZÁÉÍÓÚÀÈÌÒÙ])(.+)$"),
         ],
         "option": [
-            re.compile(r"^\s*[(\[]?([A-Ha-h])[)\].:]\s+(.+)$"),
-            re.compile(r"^\s*[(\[]?(\d{1,2})[)\]]\s+(.+)$"),
+            re.compile(r"^\s*[(\[]?([A-Ha-h])[)\].:]\s*(.+)$"),
+            re.compile(r"^\s*[(\[]?(\d{1,2})[)\]]\s*(.+)$"),
             re.compile(r"^\s*(?:☐|☑|☒|□|■|○|●|◯|\[\s?\]|\[x\]|\[X\]|-)\s+(.+)$"),
         ],
         "answer_line": [

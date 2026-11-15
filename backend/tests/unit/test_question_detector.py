@@ -19,6 +19,11 @@ def test_numbered_styles_and_options():
     assert restarted.items[0].options[-1].valor == 1
 
 
+def test_option_without_space_after_the_letter():
+    result = detect_items(_lines("1. ¿Cuánto es 2 + 2?\nA)3\nB) 4\nC)5"))
+    assert [option.texto for option in result.items[0].options] == ["3", "4", "5"]
+
+
 def test_inline_options_and_checkbox():
     result = detect_items(_lines("1. Serie\nA) 18 B) 24 C) 32\n2. Marque\n[x] Sí\n- No"))
     assert [option.texto for option in result.items[0].options] == ["18", "24", "32"]
