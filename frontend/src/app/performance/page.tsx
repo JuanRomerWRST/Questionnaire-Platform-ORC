@@ -16,7 +16,7 @@ export default function PerformancePage() {
     setLoading(true);
     setError("");
     try {
-      setMetrics(await getMetrics());
+      setMetrics(await readMetrics());
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "No se pudieron leer las métricas.");
     } finally {
@@ -82,6 +82,19 @@ export default function PerformancePage() {
       ) : null}
     </div>
   );
+}
+
+async function readMetrics() {
+  try {
+    return await getMetrics();
+  } catch (first) {
+    await new Promise((resolve) => window.setTimeout(resolve, 400));
+    try {
+      return await getMetrics();
+    } catch {
+      throw first;
+    }
+  }
 }
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {

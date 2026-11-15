@@ -1,4 +1,4 @@
-import { API_URL } from "@/lib/constants";
+import { apiUrl } from "@/lib/constants";
 import type { AggregatedMetrics, Capabilities, ExtractionResponse } from "@/types/api.types";
 
 export class ApiError extends Error {
@@ -16,7 +16,7 @@ export class ApiError extends Error {
 export async function getJson<T>(path: string): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${API_URL}${path}`, { cache: "no-store" });
+    response = await fetch(`${apiUrl()}${path}`, { cache: "no-store" });
   } catch {
     throw new ApiError("NETWORK_ERROR", 0, "No se pudo contactar la API.");
   }
@@ -51,7 +51,7 @@ export function uploadDocument(
   form.append("force_ocr", String(options.forceOcr));
   const xhr = new XMLHttpRequest();
   const promise = new Promise<ExtractionResponse>((resolve, reject) => {
-    xhr.open("POST", `${API_URL}/documents/extract`);
+    xhr.open("POST", `${apiUrl()}/documents/extract`);
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) onProgress(event.loaded / event.total);
     };
