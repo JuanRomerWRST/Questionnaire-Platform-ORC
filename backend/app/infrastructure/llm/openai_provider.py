@@ -89,7 +89,8 @@ class OpenAIProvider:
                     "text": (
                         f"{IMAGE_HINT}\n"
                         "El bloque <document> es el texto OCR. Las imágenes adjuntas son el original. "
-                        "Compara ambas fuentes y recupera solo los caracteres que la imagen respalda."
+                        "Si la imagen muestra el carácter, úsalo. Si muestra un cuadro dentro de una palabra, "
+                        "restaura el único carácter que la completa."
                     ),
                 },
             )

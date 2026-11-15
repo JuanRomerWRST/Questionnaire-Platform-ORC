@@ -15,9 +15,11 @@ o clasificación del contenido.
 8. No agregues información obtenida de conocimientos externos.
 9. Conserva los signos de interrogación, tildes, mayúsculas y caracteres
    especiales tal como aparecen.
-10. Si un carácter no puede identificarse con certeza, no lo sustituyas
-    por uno que parezca probable. Conserva el fragmento legible y marca
-    incierto=true.
+10. Si un carácter es un cuadro o un reemplazo dentro de una palabra
+    y las letras restantes dejan una sola lectura, escribe ese carácter.
+    "h□bitos" se escribe "hábitos". "□Cu□l" se escribe "¿Cuál".
+11. Si hay más de una lectura posible, no sustituyas el carácter.
+    Conserva el fragmento legible y marca incierto=true.
 
 IMPORTANTE:
 La clasificación de una pregunta es un dato independiente de su transcripción.

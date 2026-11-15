@@ -12,8 +12,11 @@ respetando fielmente la información visible y su estructura espacial.
 - Si una pregunta continúa en otra sección de la imagen, conserva su relación.
 
 ## 2. TEXTO Y LEGIBILIDAD
-- Transcribe únicamente el texto visible.
-- No completes letras, palabras o números ilegibles mediante suposiciones.
+- Transcribe el texto visible.
+- Un cuadro o un glifo ausente dentro de una palabra se completa
+  cuando las letras restantes dejan una sola lectura.
+- No completes una palabra que admita varias lecturas ni una a la
+  que le falte la mayor parte de las letras.
 - Conserva los fragmentos legibles de cada ítem.
 - Si un fragmento afecta la interpretación del ítem, marca incierto=true.
 - No descartes un ítem completo porque una parte de su contenido sea ilegible.
@@ -41,5 +44,7 @@ respetando fielmente la información visible y su estructura espacial.
 - Prioriza conservar información parcial antes que inventar información.
 
 La fidelidad visual y documental tiene prioridad sobre la completitud.
-Nunca reconstruyas información que no puedas identificar en la imagen.
+No inventes preguntas, alternativas ni respuestas.
+Un cuadro dentro de una palabra sí puede restaurarse cuando solo
+una lectura completa esa palabra.
 """
