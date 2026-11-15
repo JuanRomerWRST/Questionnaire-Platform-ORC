@@ -1,19 +1,20 @@
 # Questionnaire Intelligence
 
-Aplicación web para convertir un cuestionario en PDF, DOCX, XLSX o imagen en un JSON estable. Las reglas locales hacen la extracción. Un modelo con visión solo interviene cuando la estructura no es confiable y hay una clave configurada.
-
-![Flujo de extracción](docs/images/flow.svg)
+Aplicación web para convertir un cuestionario en PDF, DOCX, XLSX o imagen en un JSON estable. Las reglas locales hacen la extracción. Tesseract lee las imágenes y los PDF sin texto. Un modelo con visión solo interviene cuando la estructura no es confiable y hay una clave configurada.
 
 ## Arquitectura
 
 ```mermaid
-flowchart LR
-  user[Usuario] --> ui[Next.js]
-  ui -->|multipart| api[FastAPI]
-  api --> rules[Reglas locales]
-  rules -->|confianza alta| json[JSON]
-  rules -->|confianza baja| llm[OpenAI opcional]
-  llm --> json
+flowchart TD
+  usuario[Usuario] --> ui[Next.js]
+  ui -->|archivo| api[FastAPI]
+  api --> parser[Parser]
+  parser -->|texto nativo| reglas[Reglas locales]
+  parser -->|imagen o página sin texto| tesseract[Tesseract]
+  tesseract --> reglas
+  reglas -->|confianza alta| json[JSON]
+  reglas -->|confianza baja| openai[OpenAI opcional]
+  openai --> json
 ```
 
 Frontend y backend se despliegan por separado. No hay base de datos, Redis ni cola. Cada solicitud se procesa en memoria y los archivos temporales no se conservan.
@@ -77,16 +78,16 @@ Backend, en `backend/.env`:
 Frontend:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api/v1
 ```
 
-Esa URL se incrusta en el bundle. En producción tiene que ser la URL pública del backend, no el nombre interno del contenedor.
+Esa URL se incrusta en el bundle. En producción tiene que ser la URL pública del backend, no el nombre interno del contenedor. Si el valor usa `localhost`, el navegador lo cambia a `127.0.0.1`. Si `CORS_ORIGINS` incluye `localhost`, la API también acepta el mismo origen con `127.0.0.1`, y al revés.
 
 ## Ejecutar en local
 
 ```bash
 cd backend
-uv run uvicorn app.main:app --reload --port 8000
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 ```bash
@@ -94,7 +95,9 @@ cd frontend
 bun run dev
 ```
 
-La interfaz queda en `http://localhost:3000` y la API en `http://localhost:8000`.
+La interfaz queda en `http://localhost:3000` y la API en `http://127.0.0.1:8000`. En Windows, `localhost` a veces apunta a IPv6 y el proceso solo escucha en IPv4. El navegador reescribe `localhost` a `127.0.0.1` antes de llamar a la API.
+
+Páginas: inicio `/`, extracción `/extract`, resultados `/results`, rendimiento `/performance` y ajustes `/settings`. La zona de carga abre el selector al hacer clic. Los resultados muestran los ítems y el JSON. Desde ahí se copia el JSON, se descarga como `cuestionario.json` y las respuestas se descargan como `respuestas.pdf`. Extraer de nuevo repite el mismo archivo. Nueva extracción vuelve a la carga.
 
 ## Docker
 
@@ -114,7 +117,7 @@ Reconstruir solo el backend:
 docker compose build backend
 ```
 
-El daemon de Docker no estaba en marcha en la máquina de desarrollo, así que `docker compose up` queda pendiente de ejecutarse ahí. Las imágenes usan usuario no root, Python slim, Tesseract solo para español, inglés e italiano, y el runtime standalone de Next.js.
+El 14 de noviembre de 2026 el stack se construyó y arrancó en esta máquina. `/api/v1/health` respondió `ok`. Dentro del contenedor, Tesseract 5.3.0 tiene español, inglés e italiano, y `/api/v1/documents/capabilities` reporta `ocr_available: true`. En Windows, fuera del contenedor, Tesseract no está instalado: una foto o un PDF escaneado no tienen texto que leer. Las imágenes usan usuario no root, Python slim y el runtime standalone de Next.js.
 
 ## Endpoints
 
@@ -151,7 +154,7 @@ uv run pytest
 uv run ruff check app tests
 ```
 
-La suite local terminó con 46 tests en verde. No llama a OpenAI ni necesita red: el proveedor se sustituye y Tesseract real se omite si no está instalado.
+La suite local reúne 54 tests. No llama a OpenAI ni necesita red: el proveedor se sustituye y Tesseract real se omite si no está instalado.
 
 ## Locust
 
@@ -179,16 +182,7 @@ Una solicitud en frío del mismo PDF tardó 529 ms y devolvió 5 ítems sin usar
 | `docs/examples/input/sample_questionnaire_en.xlsx` | `docs/examples/output/sample_questionnaire_en.json` |
 | `docs/examples/input/sample_questionnaire_photo.jpg` | `docs/examples/output/sample_questionnaire_photo.json` |
 
-Son cuestionarios inventados. El JSON de la foto corresponde al texto impreso en la imagen; sin Tesseract local no se comparó contra un OCR real.
-
-## Despliegue
-
-Pendiente de credenciales.
-
-- Frontend: Vercel, directorio `frontend`, con `NEXT_PUBLIC_API_URL` apuntando al backend público.
-- Backend: Render con `render.yaml`, imagen Docker y `CORS_ORIGINS` igual al dominio de Vercel.
-- URL pública: se completará cuando el despliegue exista.
-- Colaborador `matias@adipa.cl`: desde GitHub, Settings, Collaborators. La API no acepta el correo directamente.
+`docs/examples/cases.json` describe el resto del corpus: texto determinístico, un PDF de baja confianza que debe llamar al modelo, fotos y PDF escaneados para OCR, y dos casos cortos que combinan OCR y modelo. Son cuestionarios inventados. El JSON de la foto corresponde al texto impreso en la imagen; no es el resultado de un OCR en vivo.
 
 ## Limitaciones
 
