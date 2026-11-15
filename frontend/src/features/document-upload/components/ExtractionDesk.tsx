@@ -1,19 +1,17 @@
 "use client";
 
 import { FileText, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { useFileUpload } from "@/features/document-upload/hooks/useFileUpload";
 import { useProcessing } from "@/features/processing/hooks/useProcessing";
 import { useCapabilities } from "@/hooks/useCapabilities";
 import { readPreferences, subscribePreferences, writePreferences, type Preferences } from "@/lib/preferences";
-import { rememberPreview } from "@/lib/preview-store";
+import { rememberPreview, sourceSaved } from "@/lib/preview-store";
 import { writeResult } from "@/lib/result-store";
 import { formatBytes } from "@/lib/utils";
 
 export function ExtractionDesk() {
-  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const { capabilities, offline } = useCapabilities();
   const extensions = capabilities.formats.map((format) => format.extension);
@@ -62,9 +60,15 @@ export function ExtractionDesk() {
 
   useEffect(() => {
     if (!processing.result) return;
-    writeResult(processing.result);
-    router.push("/results");
-  }, [processing.result, router]);
+    const next = processing.result;
+    void (async () => {
+      writeResult(next);
+      await sourceSaved();
+      // La navegación del cliente deja la vista anterior en pantalla y bloquea la siguiente extracción.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      window.location.assign("/results");
+    })();
+  }, [processing.result]);
 
   return (
     <div className="mx-auto max-w-3xl">
