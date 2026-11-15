@@ -9,7 +9,7 @@ Usuario -> Next.js -> POST /api/v1/documents/extract
         -> JSON + métricas
 ```
 
-No existe `src/app/page.tsx`. La ruta `/` vive en `src/app/(workspace)/page.tsx`. Tener las dos páginas resolvería a la misma ruta y el build de Next fallaría.
+La ruta `/` está en `src/app/page.tsx`. Extracción, resultados, rendimiento y ajustes están en `src/app/extract`, `results`, `performance` y `settings`.
 
 Las métricas viven en memoria, en una sola instancia, y se reinician con el proceso.
 
