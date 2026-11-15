@@ -17,6 +17,7 @@ from app.infrastructure.llm.base import (
 )
 from app.infrastructure.llm.prompts.image_extraction import IMAGE_HINT
 from app.infrastructure.llm.prompts.questionnaire_extraction import SYSTEM_PROMPT, build_text_input
+from app.infrastructure.llm.prompts.text_fidelity import TEXT_FIDELITY_RULES
 from app.infrastructure.llm.response_parser import LLMQuestionnaire
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ class OpenAIProvider:
             try:
                 response = await client.responses.parse(
                     model=self._settings.openai_model,
-                    instructions=SYSTEM_PROMPT,
+                    instructions=f"{TEXT_FIDELITY_RULES}\n{SYSTEM_PROMPT}",
                     input=self._input(request),
                     text_format=LLMQuestionnaire,
                     reasoning={"effort": "low"},
@@ -81,7 +82,17 @@ class OpenAIProvider:
         text = build_text_input(request.text[: self._settings.llm_max_input_chars])
         content: list[dict] = [{"type": "input_text", "text": text}]
         if request.images:
-            content.insert(0, {"type": "input_text", "text": IMAGE_HINT})
+            content.insert(
+                0,
+                {
+                    "type": "input_text",
+                    "text": (
+                        f"{IMAGE_HINT}\n"
+                        "El bloque <document> es el texto OCR. Las imágenes adjuntas son el original. "
+                        "Compara ambas fuentes y recupera solo los caracteres que la imagen respalda."
+                    ),
+                },
+            )
             for image in request.images[: self._settings.llm_max_images]:
                 content.append(
                     {
